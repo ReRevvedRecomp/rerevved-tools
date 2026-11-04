@@ -1,0 +1,95 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 25,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "windows-base",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "win-amd64-debug",
+            "displayName": "Windows AMD64 Debug",
+            "inherits": "windows-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "win-amd64-release",
+            "displayName": "Windows AMD64 Release",
+            "inherits": "windows-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_MSVC_RUNTIME_LIBRARY": "MultiThreaded"
+            }
+        },
+        {
+            "name": "linux-amd64-debug",
+            "displayName": "Linux AMD64 Debug",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_C_COMPILER": "clang-22",
+                "CMAKE_CXX_COMPILER": "clang++-22",
+                "CMAKE_BUILD_TYPE": "Debug"
+            },
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "win-amd64-debug",
+            "configurePreset": "win-amd64-debug"
+        },
+        {
+            "name": "win-amd64-release",
+            "configurePreset": "win-amd64-release"
+        },
+        {
+            "name": "linux-amd64-debug",
+            "configurePreset": "linux-amd64-debug"
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "win-amd64-debug",
+            "configurePreset": "win-amd64-debug",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+        {
+            "name": "win-amd64-release",
+            "configurePreset": "win-amd64-release",
+            "output": {
+                "outputOnFailure": true
+            }
+        },
+        {
+            "name": "linux-amd64-debug",
+            "configurePreset": "linux-amd64-debug",
+            "output": {
+                "outputOnFailure": true
+            }
+        }
+    ]
+}
