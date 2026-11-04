@@ -1,0 +1,25 @@
+# Map files, part 1: run with --smoke-test --smoke-data <empty directory> --smoke-input <this file>,
+# then input-map-open.txt on the same directory. Smoke runs save maps into its Maps folder.
+click "Map"
+click "Recent"
+expect-missing "open-recent"
+click "Create"
+expect "Create Map"
+click "map-name"
+type "Smoke Isles"
+click "Create Map"
+expect-missing "Create Map"
+close
+expect "Don't Save"
+click "Cancel"
+expect-missing "Don't Save"
+key ctrl+s
+# A saved map closes without asking and is listed under Recent.
+click "menu"
+wait 3
+click "New Map"
+click "Recent"
+expect "open-recent"
+expect-missing "Don't Save"
+close
+expect-exit

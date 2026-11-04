@@ -1,0 +1,23 @@
+# Map files, part 2: run on the directory input-map-save.txt filled, after copying its map
+# into the Recovery folder there, as a copy left by a session that ended unsaved.
+expect "Restore"
+click "Restore"
+expect "Grid"
+# Restored changes are unsaved. Don't Save drops the recovery copy.
+click "menu"
+wait 3
+click "New Map"
+click "Don't Save"
+click "Recent"
+expect "open-recent"
+click "open-recent"
+expect "Grid"
+# An opened map has no unsaved changes, so it closes without asking.
+click "menu"
+wait 3
+click "New Map"
+click "Recent"
+expect "open-recent"
+expect-missing "Don't Save"
+close
+expect-exit

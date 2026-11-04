@@ -1,0 +1,7 @@
+# Custom title bar smoke, Windows only: run with --smoke-test --smoke-input <this file>.
+# The window buttons take the pointer instead of the system caption.
+expect "window-maximize"
+move "window-maximize"
+expect-hovered "window-maximize"
+move "window-close"
+expect-hovered "window-close"

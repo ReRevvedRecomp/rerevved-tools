@@ -1,0 +1,35 @@
+# Scripted UI smoke: run with --smoke-test --smoke-input <this file>.
+# Clicks resolve item labels to logical rectangles and are injected as physical
+# window pixels, so a wrong canvas mapping misses its target.
+expect "Create Map"
+move "Map"
+expect-hovered "Map"
+key escape
+expect "About ReRevved Tools"
+wait 3
+key escape
+wait 5
+expect-missing "About ReRevved Tools"
+click "map-name"
+type "Smoke Isles"
+click "Create Map"
+expect-missing "Create Map"
+click "terrain-tool"
+expect "Polar Ice"
+click "Grassland"
+click "marker-tool"
+expect "Remove"
+expect-missing "Polar Ice"
+click "select-tool"
+expect-missing "Remove"
+click "Export"
+expect "title"
+click "Grid"
+expect-missing "title"
+close
+expect "Don't Save"
+click "Cancel"
+expect-missing "Don't Save"
+close
+click "Don't Save"
+expect-exit

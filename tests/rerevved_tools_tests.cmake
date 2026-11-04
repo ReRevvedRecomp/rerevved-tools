@@ -12,6 +12,36 @@ target_link_libraries(rerevved_tools_creator_tests PRIVATE rerevved_tools_core)
 rerevved_tools_enable_warnings(rerevved_tools_creator_tests)
 add_test(NAME rerevved_tools_creator COMMAND rerevved_tools_creator_tests)
 
+add_executable(rerevved_tools_map_image_tests
+    src/app/map/creator_workspace.cpp
+    src/app/inspect/dds_viewer.cpp
+    src/app/inspect/document_workspace.cpp
+    src/app/map/map_images.cpp
+    src/app/inspect/nif_preview_layout.cpp
+    src/app/ui/path_modal.cpp
+    src/app/map/scenario_form.cpp
+    src/app/ui/native_dialog.cpp
+    src/app/ui/ui_theme.cpp
+    src/app/ui/ui_widgets.cpp
+    tests/map_image_tests.cpp
+)
+target_include_directories(rerevved_tools_map_image_tests PRIVATE src/app)
+target_link_libraries(rerevved_tools_map_image_tests PRIVATE rerevved_tools_core rerevved_tools_imgui rerevved_tools_fonts)
+if(WIN32)
+    target_link_libraries(rerevved_tools_map_image_tests PRIVATE ole32 shell32 uuid)
+endif()
+rerevved_tools_enable_warnings(rerevved_tools_map_image_tests)
+add_test(NAME rerevved_tools_map_image COMMAND rerevved_tools_map_image_tests)
+
+add_executable(rerevved_tools_smoke_input_tests
+    src/app/smoke/smoke_input.cpp
+    tests/smoke_input_tests.cpp
+)
+target_include_directories(rerevved_tools_smoke_input_tests PRIVATE src/app)
+target_link_libraries(rerevved_tools_smoke_input_tests PRIVATE rerevved_tools_imgui)
+rerevved_tools_enable_warnings(rerevved_tools_smoke_input_tests)
+add_test(NAME rerevved_tools_smoke_input COMMAND rerevved_tools_smoke_input_tests)
+
 add_executable(rerevved_tools_map_editor_tests
     src/app/map/creator_workspace.cpp
     src/app/map/map_edit_model.cpp
@@ -92,7 +122,6 @@ add_executable(rerevved_tools_xbox_texture_tests tests/xbox_texture_tests.cpp)
 target_link_libraries(rerevved_tools_xbox_texture_tests PRIVATE rerevved_tools_core)
 rerevved_tools_enable_warnings(rerevved_tools_xbox_texture_tests)
 add_test(NAME rerevved_tools_xbox_texture COMMAND rerevved_tools_xbox_texture_tests)
-
 add_executable(rerevved_tools_xbox_dds_tests tests/xbox_dds_tests.cpp)
 target_link_libraries(rerevved_tools_xbox_dds_tests PRIVATE rerevved_tools_core)
 rerevved_tools_enable_warnings(rerevved_tools_xbox_dds_tests)
@@ -112,3 +141,26 @@ add_executable(rerevved_tools_terrain_generator_tests tests/terrain_generator_te
 target_link_libraries(rerevved_tools_terrain_generator_tests PRIVATE rerevved_tools_core)
 rerevved_tools_enable_warnings(rerevved_tools_terrain_generator_tests)
 add_test(NAME rerevved_tools_terrain_generator COMMAND rerevved_tools_terrain_generator_tests)
+
+add_executable(rerevved_tools_tests
+    src/app/inspect/archive_navigation.cpp
+    src/app/inspect/asset_inspector_format.cpp
+    src/app/inspect/document_workspace.cpp
+    src/app/inspect/inspection_format.cpp
+    src/app/inspect/inspector_navigation.cpp
+    src/app/inspect/nif_inspector_format.cpp
+    src/app/inspect/nif_preview_layout.cpp
+    tests/tools_tests.cpp
+)
+target_include_directories(rerevved_tools_tests PRIVATE src/app)
+target_link_libraries(rerevved_tools_tests PRIVATE rerevved_tools_core)
+rerevved_tools_enable_warnings(rerevved_tools_tests)
+add_test(NAME rerevved_tools COMMAND rerevved_tools_tests)
+add_executable(rerevved_source_browser_tests
+    src/app/inspect/source_browser.cpp
+    tests/source_browser_tests.cpp
+)
+target_include_directories(rerevved_source_browser_tests PRIVATE src/app)
+target_link_libraries(rerevved_source_browser_tests PRIVATE Threads::Threads)
+rerevved_tools_enable_warnings(rerevved_source_browser_tests)
+add_test(NAME rerevved_source_browser COMMAND rerevved_source_browser_tests)

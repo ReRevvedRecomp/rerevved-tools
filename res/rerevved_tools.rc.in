@@ -1,0 +1,2 @@
+// GLFW loads its window and taskbar icon from the resource named GLFW_ICON.
+GLFW_ICON ICON "@REREVVED_TOOLS_RC_ICON@"

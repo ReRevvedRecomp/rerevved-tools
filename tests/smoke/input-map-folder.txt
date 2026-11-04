@@ -1,0 +1,41 @@
+# Save To folder re-pick: run with --smoke-test --smoke-data <directory holding an empty packs folder> --smoke-input <this file>,
+# from a working directory inside the data directory, then check that packs holds two packs with different slots.
+click "Map"
+expect "Create Map"
+click "map-name"
+type "Smoke Isles"
+click "Create Map"
+expect-missing "Create Map"
+click "Export"
+click "Choose"
+expect "Use Output Parent"
+wait 10
+click "Output parent path"
+type "packs"
+click "Use Output Parent"
+click "Export Map Pack"
+expect "Copy Receipt"
+click "menu"
+wait 3
+click "New Map"
+expect "Don't Save"
+click "Don't Save"
+expect-missing "Don't Save"
+# The second map starts with the same slot, scenario ID, letter and pack ID, so exporting
+# into the same folder only works once choosing the folder has replaced them.
+click "map-name"
+type "Smoke Isles"
+click "Create Map"
+expect-missing "Create Map"
+click "Export"
+click "Choose"
+expect "Use Output Parent"
+wait 10
+click "Output parent path"
+type "packs"
+click "Use Output Parent"
+click "Export Map Pack"
+expect "Copy Receipt"
+close
+click "Don't Save"
+expect-exit
