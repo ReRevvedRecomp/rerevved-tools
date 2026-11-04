@@ -1,0 +1,116 @@
+name: Release
+
+# A push to main whose project version has no tag publishes that version.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    name: Plan Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      publish: ${{ steps.plan.outputs.publish }}
+      tag: ${{ steps.plan.outputs.tag }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Decide whether this version needs a release
+        id: plan
+        shell: bash
+        env:
+          REF: ${{ github.ref }}
+        run: |
+          version="$(sed -nE 's/^project\(rerevved_tools VERSION ([0-9]+\.[0-9]+\.[0-9]+) .*/\1/p' CMakeLists.txt)"
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo 'project version not found in CMakeLists.txt' >&2
+            exit 1
+          fi
+          tag="v$version"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          if [[ "$REF" != refs/heads/main ]]; then
+            echo "::notice::Releases are published from main only; $REF publishes nothing."
+            echo 'publish=false' >> "$GITHUB_OUTPUT"
+          elif [[ -n "$(git ls-remote --tags origin "refs/tags/$tag")" ]]; then
+            echo "::notice::$tag already exists; nothing to publish."
+            echo 'publish=false' >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::$tag has no release; publishing it."
+            echo 'publish=true' >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    name: Build Windows x64
+    needs: plan
+    if: needs.plan.outputs.publish == 'true'
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Install formatting tool
+        run: python -m pip install --disable-pip-version-check clang-format==22.1.8
+      - name: Check Windows Release
+        shell: pwsh
+        run: |
+          $pythonScripts = (python -c "import sysconfig; print(sysconfig.get_path('scripts'))").Trim()
+          $env:PATH = "$pythonScripts;C:\Program Files\LLVM\bin;$env:PATH"
+          .\scripts\verify.ps1 -Preset win-amd64-release -SkipAppSmoke
+      - name: Package
+        shell: pwsh
+        run: .\scripts\package.ps1
+      - name: Upload archive
+        uses: actions/upload-artifact@v7
+        with:
+          name: rerevved-tools-windows-x64
+          path: out/package/rerevved-tools-v*-windows-x64.zip
+          if-no-files-found: error
+          retention-days: 1
+
+  release:
+    name: Publish Release
+    needs: [plan, build]
+    if: needs.plan.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - name: Download archive
+        uses: actions/download-artifact@v8
+        with:
+          name: rerevved-tools-windows-x64
+          path: artifacts
+      # The API refuses an existing tag, so a concurrent publisher cannot move it.
+      - name: Create release tag
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ needs.plan.outputs.tag }}
+        run: >-
+          gh api "repos/$GITHUB_REPOSITORY/git/refs"
+          -f "ref=refs/tags/$TAG" -f "sha=$GITHUB_SHA"
+      - name: Publish GitHub release
+        uses: softprops/action-gh-release@v3
+        with:
+          tag_name: ${{ needs.plan.outputs.tag }}
+          name: ReRevved Tools ${{ needs.plan.outputs.tag }}
+          generate_release_notes: true
+          prerelease: false
+          files: artifacts/*.zip
+          fail_on_unmatched_files: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
