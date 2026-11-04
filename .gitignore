@@ -1,0 +1,35 @@
+# AI agents
+.claude/
+.agents/
+AGENTS.md
+CLAUDE.md
+docs/ai_agents/local/
+
+# Build and editor output
+/out/
+/imgui.ini
+/.vs/
+/.vscode/
+/.idea/
+*.user
+*.suo
+*.tmp
+*.log
+
+# User-owned retail content
+/game/
+/content/
+*.iso
+*.bin
+*.xex
+*.xexp
+*.fpk
+*.gfx
+*.dds
+*.bik
+*.mp3
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
