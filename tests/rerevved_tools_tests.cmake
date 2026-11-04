@@ -3,6 +3,71 @@ target_link_libraries(rerevved_tools_asset_pack_tests PRIVATE rerevved_tools_cor
 rerevved_tools_enable_warnings(rerevved_tools_asset_pack_tests)
 add_test(NAME rerevved_tools_asset_pack COMMAND rerevved_tools_asset_pack_tests)
 
+add_executable(rerevved_tools_creator_tests
+    src/app/map/creator_workspace.cpp
+    tests/creator_tests.cpp
+)
+target_include_directories(rerevved_tools_creator_tests PRIVATE src/app)
+target_link_libraries(rerevved_tools_creator_tests PRIVATE rerevved_tools_core)
+rerevved_tools_enable_warnings(rerevved_tools_creator_tests)
+add_test(NAME rerevved_tools_creator COMMAND rerevved_tools_creator_tests)
+
+add_executable(rerevved_tools_map_editor_tests
+    src/app/map/creator_workspace.cpp
+    src/app/map/map_edit_model.cpp
+    tests/map_editor_tests.cpp
+)
+target_include_directories(rerevved_tools_map_editor_tests PRIVATE src/app)
+target_link_libraries(rerevved_tools_map_editor_tests PRIVATE rerevved_tools_core)
+rerevved_tools_enable_warnings(rerevved_tools_map_editor_tests)
+add_test(NAME rerevved_tools_map_editor COMMAND rerevved_tools_map_editor_tests)
+
+add_executable(rerevved_tools_map_draft_tests
+    src/app/map/map_draft_store.cpp
+    tests/map_draft_tests.cpp
+)
+target_include_directories(rerevved_tools_map_draft_tests PRIVATE src/app)
+target_link_libraries(rerevved_tools_map_draft_tests PRIVATE rerevved_tools_core)
+rerevved_tools_enable_warnings(rerevved_tools_map_draft_tests)
+add_test(NAME rerevved_tools_map_draft COMMAND rerevved_tools_map_draft_tests)
+
+add_executable(rerevved_tools_map_wizard_tests
+    src/app/map/map_wizard.cpp
+    tests/map_wizard_tests.cpp
+)
+target_include_directories(rerevved_tools_map_wizard_tests PRIVATE src/app)
+target_link_libraries(rerevved_tools_map_wizard_tests PRIVATE rerevved_tools_core)
+rerevved_tools_enable_warnings(rerevved_tools_map_wizard_tests)
+add_test(NAME rerevved_tools_map_wizard COMMAND rerevved_tools_map_wizard_tests)
+
+add_executable(rerevved_tools_scenario_form_tests
+    src/app/map/creator_workspace.cpp
+    src/app/map/scenario_form.cpp
+    tests/scenario_form_tests.cpp
+)
+target_include_directories(rerevved_tools_scenario_form_tests PRIVATE src/app)
+target_link_libraries(rerevved_tools_scenario_form_tests PRIVATE rerevved_tools_core)
+rerevved_tools_enable_warnings(rerevved_tools_scenario_form_tests)
+add_test(NAME rerevved_tools_scenario_form COMMAND rerevved_tools_scenario_form_tests)
+
+add_executable(rerevved_tools_map_pack_export_tests
+    src/app/map/creator_workspace.cpp
+    src/app/map/map_edit_model.cpp
+    src/app/map/map_pack_export.cpp
+    src/app/map/scenario_form.cpp
+    tests/map_pack_export_tests.cpp
+)
+target_include_directories(rerevved_tools_map_pack_export_tests PRIVATE src/app)
+target_link_libraries(rerevved_tools_map_pack_export_tests PRIVATE rerevved_tools_core)
+rerevved_tools_enable_warnings(rerevved_tools_map_pack_export_tests)
+add_test(NAME rerevved_tools_map_pack_export COMMAND rerevved_tools_map_pack_export_tests)
+
+add_executable(rerevved_tools_map_suite_tests ${REREVVED_TOOLS_MAP_SUITE_SOURCES} tests/map_suite_tests.cpp)
+target_include_directories(rerevved_tools_map_suite_tests PRIVATE src/app)
+target_link_libraries(rerevved_tools_map_suite_tests PRIVATE rerevved_tools_core)
+rerevved_tools_enable_warnings(rerevved_tools_map_suite_tests)
+add_test(NAME rerevved_tools_map_suite COMMAND rerevved_tools_map_suite_tests)
+
 add_executable(rerevved_tools_fpk_writer_tests tests/fpk_writer_tests.cpp)
 target_link_libraries(rerevved_tools_fpk_writer_tests PRIVATE rerevved_tools_core)
 rerevved_tools_enable_warnings(rerevved_tools_fpk_writer_tests)

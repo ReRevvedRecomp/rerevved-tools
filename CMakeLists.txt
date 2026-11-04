@@ -58,6 +58,21 @@ endfunction()
 
 rerevved_tools_enable_warnings(rerevved_tools_core)
 
+set(REREVVED_TOOLS_MAP_SUITE_SOURCES
+    src/app/map/creator_workspace.cpp
+    src/app/map/map_draft_store.cpp
+    src/app/map/map_edit_model.cpp
+    src/app/map/map_images.cpp
+    src/app/map/map_pack_export.cpp
+    src/app/map/map_suite.cpp
+    src/app/map/map_wizard.cpp
+    src/app/map/scenario_form.cpp
+)
+add_executable(rerevved-map-suite ${REREVVED_TOOLS_MAP_SUITE_SOURCES} src/app/map/map_suite_main.cpp)
+target_include_directories(rerevved-map-suite PRIVATE src/app)
+target_link_libraries(rerevved-map-suite PRIVATE rerevved_tools_core)
+rerevved_tools_enable_warnings(rerevved-map-suite)
+
 if(BUILD_TESTING)
     include(tests/rerevved_tools_tests.cmake)
 endif()
